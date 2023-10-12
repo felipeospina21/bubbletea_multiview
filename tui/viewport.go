@@ -1,13 +1,30 @@
-package main
+package tui
 
 import (
 	"fmt"
+	"os"
 	"strings"
 
 	"github.com/charmbracelet/bubbles/viewport"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
 )
+
+type viewportModel struct {
+	mod     viewport.Model
+	ready   bool
+	content string
+}
+
+func (m *mainModel) initViewportModel() {
+	content, err := os.ReadFile("artichoke.md")
+	if err != nil {
+		fmt.Println("could not load file:", err)
+		os.Exit(1)
+	}
+
+	m.viewport.content = string(content)
+}
 
 func (m *mainModel) headerView() string {
 	title := titleStyle.Render("Mr. Pager")
